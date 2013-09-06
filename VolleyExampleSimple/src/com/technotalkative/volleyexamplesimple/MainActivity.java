@@ -5,10 +5,13 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -25,6 +28,7 @@ public class MainActivity extends Activity {
 
 	private TextView txtDisplay;
 	private NetworkImageView imageView;
+	private ShareActionProvider shareActionProvider;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +104,20 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+		
+	    // Locate MenuItem with ShareActionProvider
+	    MenuItem item = menu.findItem(R.id.menu_item_share);
+
+	    // Fetch and store ShareActionProvider
+	    shareActionProvider = (ShareActionProvider) item.getActionProvider();
+	    Intent shareIntent = new Intent();
+	    shareIntent.setAction(Intent.ACTION_SEND);
+	    shareIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+	    shareIntent.setType("text/plain");
+		shareActionProvider.setShareIntent(shareIntent );
+
+	    // Return true to display menu
+	    return true;
 	}
 
 }
